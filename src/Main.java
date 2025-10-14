@@ -10,7 +10,7 @@ public class Main {
         int option = 0;
 
         while(option!=5){
-            menu();
+            System.out.println(menu());
             option = sc.nextInt();
 
             switch(option){
