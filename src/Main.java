@@ -27,6 +27,13 @@ public class Main {
             }
         }
     }
+
+    /**
+    * Ejecuta el comando especificado mediande entrada estándar.
+    * Utilizando ProcessBuilder para generar un nuevo proceso, muestra la salida del programa línea por línea.
+    *
+    * Excepciones: Se gestiona IOException e InterruptedException.
+    */
     private static void ejecutarComando() {
         System.out.println("Introduce un comando a ejecutar: ");
         String comando = sc.nextLine();
