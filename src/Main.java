@@ -15,7 +15,7 @@ public class Main {
         while(option!=5){
             System.out.println(menu());
             option = sc.nextInt();
-            sc.nextLine(); // Consume newline
+            sc.nextLine();
 
             switch(option){
                 case 1 -> ejecutarComando();
@@ -50,6 +50,26 @@ public class Main {
             Thread.currentThread().interrupt();
         }
     }
+
+    /**
+     Lanza una aplicación de edición de texto predeterminada según el sistema operativo detectado.
+     * <p>
+     * Este método identifica si el sistema operativo es Windows o Linux y selecciona un editor de texto
+     * apropiado para abrirlo mediante {@link ProcessBuilder}. En Windows intenta abrir <b>Notepad</b>
+     * y en Linux intenta abrir <b>Gedit</b>.
+     * </p>
+     * <p>
+     * Si la aplicación no está instalada o no se encuentra en el PATH del sistema, se mostrará un mensaje
+     * de error al usuario.
+     * </p>
+     * <h4>Excepciones controladas:</h4>
+     * <ul>
+     *   <li>{@link IOException} si la aplicación no se encuentra o no se puede ejecutar.</li>
+     *   <li>{@link InterruptedException} si el hilo es interrumpido mientras espera que el proceso termine.</li>
+     * </ul>
+     * Este método es bloqueante porque utiliza {@code proceso.waitFor()},
+     * es decir, no continúa hasta que el usuario cierre la aplicación lanzada.
+     */
 
     private static void lanzarAplicacion() {
         String os = System.getProperty("os.name").toLowerCase();
