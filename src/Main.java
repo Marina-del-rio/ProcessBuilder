@@ -65,15 +65,8 @@ public class Main {
      * apropiado para abrirlo mediante {@link ProcessBuilder}. En Windows intenta abrir <b>Notepad</b>
      * y en Linux intenta abrir <b>Gedit</b>.
      * </p>
-     * <p>
      * Si la aplicación no está instalada o no se encuentra en el PATH del sistema, se mostrará un mensaje
      * de error al usuario.
-     * </p>
-     * <h4>Excepciones controladas:</h4>
-     * <ul>
-     *   <li>{@link IOException} si la aplicación no se encuentra o no se puede ejecutar.</li>
-     *   <li>{@link InterruptedException} si el hilo es interrumpido mientras espera que el proceso termine.</li>
-     * </ul>
      * Este método es bloqueante porque utiliza {@code proceso.waitFor()},
      * es decir, no continúa hasta que el usuario cierre la aplicación lanzada.
      */
