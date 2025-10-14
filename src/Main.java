@@ -12,6 +12,7 @@ public class Main {
         while(option!=5){
             System.out.println(menu());
             option = sc.nextInt();
+            sc.nextLine();
 
             switch(option){
                 case 1 -> {
