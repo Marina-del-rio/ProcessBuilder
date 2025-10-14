@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.lang.ProcessBuilder;
 
@@ -26,7 +28,7 @@ public class Main {
         }
     }
     private static void ejecutarComando() {
-        System.out.println("Introduce un comando a ejecutar");
+        System.out.println("Introduce un comando a ejecutar: ");
         String comando = sc.nextLine();
         try {
             ProcessBuilder pb = new ProcessBuilder(comando);
@@ -86,10 +88,58 @@ public class Main {
     private static void comandoConRedireccion(){
         System.out.println("Función no implementada.");
     }
-    private static void comandoconEntorno(){
-        System.out.println("Función no implementada.");
-    }
 
+    private static void comandoconEntorno(){
+        System.out.println("Introduce el comando: ");
+        String comando = sc.nextLine();
+
+        System.out.println("El comando con entrada: " + comando);
+
+        System.out.println("____Configuración de las variables del entorno____");
+        Map<String, String> envVars = new HashMap<>();
+        System.out.println("Variable (clave=valor, Enter para terminar): ");
+        String line = sc.nextLine();
+
+        while(!line.isEmpty()){
+            String[] parts = line.split("=", 2);
+            if(parts.length == 2){
+                envVars.put(parts[0], parts[1]);
+            }else{
+                System.out.println("Formato incorrecto");
+            }
+            System.out.print("Variable (clave=valor, Enter para terminar): ");
+            line = sc.nextLine();
+        }
+
+        try{
+            ProcessBuilder pb;
+
+            String os = System.getProperty("os.name").toLowerCase();
+            if(os.contains("win")){
+                pb = new ProcessBuilder("cmd", "/c", comando);
+            }else{
+                pb = new ProcessBuilder("bash", "-c", comando);
+            }
+
+            Map<String, String> env = pb.environment();
+            env.putAll(envVars);
+
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String output;
+            while ((output = reader.readLine()) != null){
+                System.out.println(output);
+            }
+
+            int exitCode = process.waitFor();
+            System.out.println("El proceso ha finalizado" + exitCode);
+
+        }catch (IOException | InterruptedException e){
+            System.out.println("Error al ejecutar el comando: " + e.getMessage());
+        }
+    }
     /**
      * Muestra el menú principal de la aplicación de gestión de procesos.
      * <p>
