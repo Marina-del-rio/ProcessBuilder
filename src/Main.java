@@ -29,11 +29,29 @@ public class Main {
     }
 
     /**
-    * Ejecuta el comando especificado mediande entrada estándar.
-    * Utilizando ProcessBuilder para generar un nuevo proceso, muestra la salida del programa línea por línea.
-    *
-    * Excepciones: Se gestiona IOException e InterruptedException.
-    */
+     * Ejecuta un comando del sistema operativo mediante entrada estándar y muestra su salida.
+     *
+     * <p>Utiliza la clase {@link ProcessBuilder} para generar un nuevo proceso del sistema operativo
+     * que ejecuta el comando especificado por el usuario. Captura la salida estándar del proceso
+     * y la muestra línea por línea en la consola.</p>
+     *
+     * <p>El método espera a que el proceso finalice su ejecución y muestra el código de salida
+     * para indicar si la ejecución fue exitosa o no.</p>
+     *
+     * <p><b>Flujo de ejecución:</b></p>
+     * <ol>
+     *   <li>Solicita al usuario un comando mediante entrada estándar</li>
+     *   <li>Crea un proceso usando {@link ProcessBuilder}</li>
+     *   <li>Captura y muestra la salida del proceso línea por línea</li>
+     *   <li>Espera la finalización del proceso y muestra el código de salida</li>
+     * </ol>
+     *
+     * <p><b>Excepciones gestionadas:</b></p>
+     * <ul>
+     *   <li>{@link IOException} - Si ocurre un error de E/S al ejecutar el comando</li>
+     *   <li>{@link InterruptedException} - Si la espera del proceso es interrumpida</li>
+     * </ul>
+     */
     private static void ejecutarComando() {
         System.out.println("Introduce un comando a ejecutar: ");
         String comando = sc.nextLine();
@@ -183,13 +201,13 @@ public class Main {
      */
     private static String menu(){
         return """
-
-=== Gestión de Procesos con ProcessBuilder === 
+=== Gestión de Procesos con ProcessBuilder ===
 1. Ejecutar comando
-2. Lanzar aplicacion
+2. Lanzar aplicación
 3. Ejecutar comando con redirección
 4. Ejecutar comando con variables de entorno
 5. Salir
-Selecciona una opcion""";
+
+Selecciona una opción: """;
     }
 }
