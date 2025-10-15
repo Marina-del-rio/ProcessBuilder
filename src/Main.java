@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.lang.ProcessBuilder;
 
 public class Main {
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
 
         int option = 0;
@@ -21,7 +21,7 @@ public class Main {
                 case 1 -> ejecutarComando();
                 case 2 -> lanzarAplicacion();
                 case 3 -> comandoConRedireccion();
-                case 4 -> comandoconEntorno();
+                case 4 -> comandoConEntorno();
                 case 5 -> System.out.println("Vuelva pronto");
                 default -> System.out.println("Opción no válida");
             }
@@ -151,7 +151,7 @@ public class Main {
             StringBuilder errores = new StringBuilder();
             String errorLine;
             while ((errorLine = errorReader.readLine()) != null) {
-                errores.append(errorLine).append("");
+                errores.append(errorLine);
             }
 
             // Esperar a que el proceso termine
@@ -160,15 +160,15 @@ public class Main {
             // Mostrar resultados
             if (exitCode == 0) {
                 System.out.println("Comando ejecutado exitosamente con código: " + exitCode);
-                if (errores.length() > 0) {
+                if (!errores.isEmpty()) {
                     System.out.println("Mensajes del sistema:");
-                    System.out.println(errores.toString());
+                    System.out.println(errores);
                 }
             } else {
                 System.out.println("El comando finalizó con código de error: " + exitCode);
-                if (errores.length() > 0) {
+                if (!errores.isEmpty()) {
                     System.out.println("Errores:");
-                    System.out.println(errores.toString());
+                    System.out.println(errores);
                 }
             }
 
@@ -180,7 +180,7 @@ public class Main {
         }
     }
 
-    public static void comandoconEntorno(){
+    public static void comandoConEntorno(){
         System.out.println("Introduce el comando: ");
         String comando = sc.nextLine();
 
