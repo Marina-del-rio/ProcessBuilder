@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.lang.ProcessBuilder;
 
 public class Main {
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
 
         int option = 0;
@@ -21,7 +21,7 @@ public class Main {
                 case 1 -> ejecutarComando();
                 case 2 -> lanzarAplicacion();
                 case 3 -> comandoConRedireccion();
-                case 4 -> comandoconEntorno();
+                case 4 -> comandoConEntorno();
                 case 5 -> System.out.println("Vuelva pronto");
                 default -> System.out.println("Opción no válida");
             }
@@ -29,12 +29,30 @@ public class Main {
     }
 
     /**
-    * Ejecuta el comando especificado mediande entrada estándar.
-    * Utilizando ProcessBuilder para generar un nuevo proceso, muestra la salida del programa línea por línea.
-    *
-    * Excepciones: Se gestiona IOException e InterruptedException.
-    */
-    public static void ejecutarComando() {
+     * Ejecuta un comando del sistema operativo mediante entrada estándar y muestra su salida.
+     *
+     * <p>Utiliza la clase {@link ProcessBuilder} para generar un nuevo proceso del sistema operativo
+     * que ejecuta el comando especificado por el usuario. Captura la salida estándar del proceso
+     * y la muestra línea por línea en la consola.</p>
+     *
+     * <p>El método espera a que el proceso finalice su ejecución y muestra el código de salida
+     * para indicar si la ejecución fue exitosa o no.</p>
+     *
+     * <p><b>Flujo de ejecución:</b></p>
+     * <ol>
+     *   <li>Solicita al usuario un comando mediante entrada estándar</li>
+     *   <li>Crea un proceso usando {@link ProcessBuilder}</li>
+     *   <li>Captura y muestra la salida del proceso línea por línea</li>
+     *   <li>Espera la finalización del proceso y muestra el código de salida</li>
+     * </ol>
+     *
+     * <p><b>Excepciones gestionadas:</b></p>
+     * <ul>
+     *   <li>{@link IOException} - Si ocurre un error de E/S al ejecutar el comando</li>
+     *   <li>{@link InterruptedException} - Si la espera del proceso es interrumpida</li>
+     * </ul>
+     */
+    private static void ejecutarComando() {
         System.out.println("Introduce un comando a ejecutar: ");
         String comando = sc.nextLine();
         try {
@@ -104,11 +122,65 @@ public class Main {
         }
     }
 
-    public static void comandoConRedireccion(){
-        System.out.println("Función no implementada.");
+    private static void comandoConRedireccion() {
+        System.out.println("""
+        Introduce el comando con redirección
+        (ej: 'dir > out/salida.txt)""");
+
+        String comandoCompleto = sc.nextLine();
+
+        try {
+            ProcessBuilder pb;
+            if (isWindows()) {
+                pb = new ProcessBuilder("cmd", "/c", comandoCompleto);
+            } else if (isLinux()) {
+                pb = new ProcessBuilder("bash", "-c", comandoCompleto);
+            } else {
+                System.out.println("Sistema operativo no compatible para esta función.");
+                return;
+            }
+
+            // Configurar el directorio de trabajo al directorio actual
+            pb.directory(new java.io.File(System.getProperty("user.dir")));
+
+            // Iniciar el proceso
+            Process process = pb.start();
+
+            // Leer la salida de error para mostrar mensajes si los hay
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            StringBuilder errores = new StringBuilder();
+            String errorLine;
+            while ((errorLine = errorReader.readLine()) != null) {
+                errores.append(errorLine);
+            }
+
+            // Esperar a que el proceso termine
+            int exitCode = process.waitFor();
+
+            // Mostrar resultados
+            if (exitCode == 0) {
+                System.out.println("Comando ejecutado exitosamente con código: " + exitCode);
+                if (!errores.isEmpty()) {
+                    System.out.println("Mensajes del sistema:");
+                    System.out.println(errores);
+                }
+            } else {
+                System.out.println("El comando finalizó con código de error: " + exitCode);
+                if (!errores.isEmpty()) {
+                    System.out.println("Errores:");
+                    System.out.println(errores);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al ejecutar el comando: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.out.println("La ejecución del comando fue interrumpida: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
     }
 
-    public static void comandoconEntorno(){
+    public static void comandoConEntorno(){
         System.out.println("Introduce el comando: ");
         String comando = sc.nextLine();
 
@@ -189,13 +261,13 @@ public class Main {
      */
     private static String menu(){
         return """
-
-=== Gestión de Procesos con ProcessBuilder === 
+=== Gestión de Procesos con ProcessBuilder ===
 1. Ejecutar comando
-2. Lanzar aplicacion
+2. Lanzar aplicación
 3. Ejecutar comando con redirección
 4. Ejecutar comando con variables de entorno
 5. Salir
-Selecciona una opcion""";
+
+Selecciona una opción:""";
     }
 }
