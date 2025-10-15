@@ -52,7 +52,7 @@ public class Main {
      *   <li>{@link InterruptedException} - Si la espera del proceso es interrumpida</li>
      * </ul>
      */
-    private static void ejecutarComando() {
+    public static void ejecutarComando() {
         System.out.println("Introduce un comando a ejecutar: ");
         String comando = sc.nextLine();
         try {
@@ -145,7 +145,7 @@ public class Main {
      * </p>
      *
      */
-    private static void comandoConRedireccion() {
+    public static void comandoConRedireccion() {
         System.out.println("""
         Introduce el comando con redirección
         (ej: 'dir > out/salida.txt)""");
