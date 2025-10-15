@@ -118,10 +118,33 @@ public class Main {
         } catch (InterruptedException e) {
             System.err.println("El proceso fue interrumpido.");
             e.printStackTrace();
-            Thread.currentThread().interrupt(); // Restore the interrupted status
+            Thread.currentThread().interrupt();
         }
     }
 
+
+    /**
+     *
+     * <p>
+     * El método solicita al usuario que introduzca un comando con redirección (por ejemplo:
+     * {@code dir > out/salida.txt}) y lo ejecuta en una nueva instancia del intérprete de comandos
+     * adecuado según el sistema operativo (Windows o Linux).
+     * </p>
+     * <p>
+     * Durante la ejecución:
+     * <ul>
+     *     <li>Se determina si el sistema operativo es Windows o Linux.</li>
+     *     <li>Se configura el directorio de trabajo al directorio actual del proyecto.</li>
+     *     <li>Se captura la salida de error del proceso para mostrar posibles mensajes o errores.</li>
+     *     <li>Se espera a que el proceso finalice y se muestra el código de salida.</li>
+     * </ul>
+     * </p>
+     * <p>
+     * El método imprime mensajes informativos sobre el éxito o fallo del comando,
+     * así como cualquier error del sistema capturado.
+     * </p>
+     *
+     */
     private static void comandoConRedireccion() {
         System.out.println("""
         Introduce el comando con redirección
