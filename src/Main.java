@@ -89,20 +89,19 @@ public class Main {
      * es decir, no continúa hasta que el usuario cierre la aplicación lanzada.
      */
 
-    private static void lanzarAplicacion() {
-        String os = System.getProperty("os.name").toLowerCase();
+    public static void lanzarAplicacion() {
         String command;
 
-        if (os.contains("win")) {
+        if (isWindows()) {
             command = "notepad.exe";
-        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
-            command = "gedit"; // A common Linux GUI text editor
+        } else if (isLinux()) {
+            command = "gedit";
         } else {
             System.out.println("Sistema operativo no compatible para esta función.");
             return;
         }
 
-        System.out.println("Sistema operativo detectado: " + os);
+        System.out.println("Sistema operativo detectado: " + System.getProperty("os.name"));
         System.out.println("Intentando lanzar el editor de texto por defecto: " + command);
         System.out.println("(Si el programa no se abre, puede que no esté instalado o en su PATH)");
 
@@ -183,7 +182,7 @@ public class Main {
         }
     }
 
-    private static void comandoconEntorno(){
+    public static void comandoconEntorno(){
         System.out.println("Introduce el comando: ");
         String comando = sc.nextLine();
 
@@ -207,12 +206,13 @@ public class Main {
 
         try{
             ProcessBuilder pb;
-
-            String os = System.getProperty("os.name").toLowerCase();
-            if(os.contains("win")){
+            if (isWindows()) {
                 pb = new ProcessBuilder("cmd", "/c", comando);
-            }else{
+            } else if(isLinux()) {
                 pb = new ProcessBuilder("bash", "-c", comando);
+            }else{
+                System.out.println("Sistema operativo no compatible para esta función.");
+                return;
             }
 
             Map<String, String> env = pb.environment();
@@ -234,6 +234,19 @@ public class Main {
             System.out.println("Error al ejecutar el comando: " + e.getMessage());
         }
     }
+
+    /**
+     * Comprobar si es windows o linux para algunos metodos que lo requieren, ya que asi no se repite tanto.
+     * @return True o False depende de si es linux o windows
+     */
+    public static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
+    }
+    public static boolean isLinux() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return os.contains("nix") || os.contains("nux") || os.contains("aix");
+    }
+
     /**
      * Muestra el menú principal de la aplicación de gestión de procesos.
      * <p>
