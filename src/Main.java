@@ -180,6 +180,25 @@ public class Main {
         }
     }
 
+    /**
+     * Ejecuta un comando del sistema con variables de entorno personalizadas.
+     * <p>
+     * Permite al usuario definir variables de entorno adicionales para el comando.
+     * Las variables se introducen en formato clave=valor y se añaden al entorno del proceso hijo.
+     * </p>
+     * <p>
+     * El comando se ejecuta en el shell correspondiente al sistema operativo:
+     * <ul>
+     *     <li>Windows: {@code cmd /c}</li>
+     *     <li>Linux: {@code bash -c}</li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+     * Las variables personalizadas se fusionan con el entorno heredado del proceso padre.
+     * Solo afectan al proceso hijo, no modifican el entorno del programa principal.
+     * </p>
+     */
     public static void comandoConEntorno(){
         System.out.println("Introduce el comando: ");
         String comando = sc.nextLine();
