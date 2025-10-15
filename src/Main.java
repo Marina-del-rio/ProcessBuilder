@@ -123,8 +123,64 @@ public class Main {
         }
     }
 
-    private static void comandoConRedireccion(){
-        System.out.println("Función no implementada.");
+    private static void comandoConRedireccion() {
+        System.out.println("""
+        Introduce el comando con redirección
+        (ej: 'dir > out/salida.txt)""");
+
+        String comandoCompleto = sc.nextLine();
+
+        try {
+            // Detectar el sistema operativo
+            String os = System.getProperty("os.name").toLowerCase();
+            ProcessBuilder pb;
+
+            if (os.contains("win")) {
+                // En Windows usar cmd con /c
+                pb = new ProcessBuilder("cmd", "/c", comandoCompleto);
+            } else {
+                // En Linux/Unix usar bash con -c
+                pb = new ProcessBuilder("bash", "-c", comandoCompleto);
+            }
+
+            // Configurar el directorio de trabajo al directorio actual
+            pb.directory(new java.io.File(System.getProperty("user.dir")));
+
+            // Iniciar el proceso
+            Process process = pb.start();
+
+            // Leer la salida de error para mostrar mensajes si los hay
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            StringBuilder errores = new StringBuilder();
+            String errorLine;
+            while ((errorLine = errorReader.readLine()) != null) {
+                errores.append(errorLine).append("\n");
+            }
+
+            // Esperar a que el proceso termine
+            int exitCode = process.waitFor();
+
+            // Mostrar resultados
+            if (exitCode == 0) {
+                System.out.println("Comando ejecutado exitosamente con código: " + exitCode);
+                if (errores.length() > 0) {
+                    System.out.println("Mensajes del sistema:");
+                    System.out.println(errores.toString());
+                }
+            } else {
+                System.out.println("El comando finalizó con código de error: " + exitCode);
+                if (errores.length() > 0) {
+                    System.out.println("Errores:");
+                    System.out.println(errores.toString());
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al ejecutar el comando: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.out.println("La ejecución del comando fue interrumpida: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
     }
 
     private static void comandoconEntorno(){
