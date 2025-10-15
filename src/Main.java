@@ -130,16 +130,14 @@ public class Main {
         String comandoCompleto = sc.nextLine();
 
         try {
-            // Detectar el sistema operativo
-            String os = System.getProperty("os.name").toLowerCase();
             ProcessBuilder pb;
-
-            if (os.contains("win")) {
-                // En Windows usar cmd con /c
+            if (isWindows()) {
                 pb = new ProcessBuilder("cmd", "/c", comandoCompleto);
-            } else {
-                // En Linux/Unix usar bash con -c
+            } else if (isLinux()) {
                 pb = new ProcessBuilder("bash", "-c", comandoCompleto);
+            } else {
+                System.out.println("Sistema operativo no compatible para esta función.");
+                return;
             }
 
             // Configurar el directorio de trabajo al directorio actual
@@ -153,7 +151,7 @@ public class Main {
             StringBuilder errores = new StringBuilder();
             String errorLine;
             while ((errorLine = errorReader.readLine()) != null) {
-                errores.append(errorLine).append("\n");
+                errores.append(errorLine).append("");
             }
 
             // Esperar a que el proceso termine
