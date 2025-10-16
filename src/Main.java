@@ -6,8 +6,15 @@ import java.util.Map;
 import java.util.Scanner;
 import java.lang.ProcessBuilder;
 
+/**
+ * Clase principal que contiene el menú y los métodos para ejecutar procesos.
+ */
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
+    /**
+     * Método principal que muestra el menú y gestiona las opciones del usuario.
+     * @param args Argumentos de la línea de comandos (no se utilizan).
+     */
     public static void main(String[] args) {
 
         int option = 0;
@@ -30,23 +37,19 @@ public class Main {
 
     /**
      * Ejecuta un comando del sistema operativo mediante entrada estándar y muestra su salida.
-     *
-     * <p>Utiliza la clase {@link ProcessBuilder} para generar un nuevo proceso del sistema operativo
+     * Utiliza la clase {@link ProcessBuilder} para generar un nuevo proceso del sistema operativo
      * que ejecuta el comando especificado por el usuario. Captura la salida estándar del proceso
-     * y la muestra línea por línea en la consola.</p>
-     *
-     * <p>El método espera a que el proceso finalice su ejecución y muestra el código de salida
-     * para indicar si la ejecución fue exitosa o no.</p>
-     *
-     * <p><b>Flujo de ejecución:</b></p>
+     * y la muestra línea por línea en la consola.
+     * El método espera a que el proceso finalice su ejecución y muestra el código de salida
+     * para indicar si la ejecución fue exitosa o no.
+     * <b>Flujo de ejecución:</b>
      * <ol>
      *   <li>Solicita al usuario un comando mediante entrada estándar</li>
      *   <li>Crea un proceso usando {@link ProcessBuilder}</li>
      *   <li>Captura y muestra la salida del proceso línea por línea</li>
      *   <li>Espera la finalización del proceso y muestra el código de salida</li>
      * </ol>
-     *
-     * <p><b>Excepciones gestionadas:</b></p>
+     * <b>Excepciones gestionadas:</b>
      * <ul>
      *   <li>{@link IOException} - Si ocurre un error de E/S al ejecutar el comando</li>
      *   <li>{@link InterruptedException} - Si la espera del proceso es interrumpida</li>
@@ -77,12 +80,10 @@ public class Main {
     }
 
     /**
-     Lanza una aplicación de edición de texto predeterminada según el sistema operativo detectado.
-     * <p>
+     * Lanza una aplicación de edición de texto predeterminada según el sistema operativo detectado.
      * Este método identifica si el sistema operativo es Windows o Linux y selecciona un editor de texto
      * apropiado para abrirlo mediante {@link ProcessBuilder}. En Windows intenta abrir <b>Notepad</b>
      * y en Linux intenta abrir <b>Gedit</b>.
-     * </p>
      * Si la aplicación no está instalada o no se encuentra en el PATH del sistema, se mostrará un mensaje
      * de error al usuario.
      * Este método es bloqueante porque utiliza {@code proceso.waitFor()},
@@ -124,13 +125,9 @@ public class Main {
 
 
     /**
-     *
-     * <p>
      * El método solicita al usuario que introduzca un comando con redirección (por ejemplo:
      * {@code dir > out/salida.txt}) y lo ejecuta en una nueva instancia del intérprete de comandos
      * adecuado según el sistema operativo (Windows o Linux).
-     * </p>
-     * <p>
      * Durante la ejecución:
      * <ul>
      *     <li>Se determina si el sistema operativo es Windows o Linux.</li>
@@ -138,12 +135,8 @@ public class Main {
      *     <li>Se captura la salida de error del proceso para mostrar posibles mensajes o errores.</li>
      *     <li>Se espera a que el proceso finalice y se muestra el código de salida.</li>
      * </ul>
-     * </p>
-     * <p>
      * El método imprime mensajes informativos sobre el éxito o fallo del comando,
      * así como cualquier error del sistema capturado.
-     * </p>
-     *
      */
     public static void comandoConRedireccion() {
         System.out.println("""
@@ -205,22 +198,17 @@ public class Main {
 
     /**
      * Ejecuta un comando del sistema con variables de entorno personalizadas.
-     * <p>
      * Permite al usuario definir variables de entorno adicionales para el comando.
      * Las variables se introducen en formato clave=valor y se añaden al entorno del proceso hijo.
-     * </p>
-     * <p>
      * El comando se ejecuta en el shell correspondiente al sistema operativo:
      * <ul>
      *     <li>Windows: {@code cmd /c}</li>
      *     <li>Linux: {@code bash -c}</li>
      * </ul>
-     * </p>
      *
-     * <p>
      * Las variables personalizadas se fusionan con el entorno heredado del proceso padre.
      * Solo afectan al proceso hijo, no modifican el entorno del programa principal.
-     * </p>
+     *
      */
     public static void comandoConEntorno(){
         System.out.println("Introduce el comando: ");
@@ -282,6 +270,10 @@ public class Main {
     public static boolean isWindows() {
         return System.getProperty("os.name").toLowerCase().contains("win");
     }
+    /**
+     * Comprueba si el sistema operativo es Linux.
+     * @return True si es Linux, false en caso contrario.
+     */
     public static boolean isLinux() {
         String os = System.getProperty("os.name").toLowerCase();
         return os.contains("nix") || os.contains("nux") || os.contains("aix");
@@ -289,7 +281,6 @@ public class Main {
 
     /**
      * Muestra el menú principal de la aplicación de gestión de procesos.
-     * <p>
      * Este menú ofrece al usuario las diferentes opciones disponibles:
      * <ul>
      *     <li>1. Ejecutar comando</li>
